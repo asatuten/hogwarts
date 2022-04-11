@@ -1,7 +1,10 @@
 package edu.tcu.cs.hogwartsartifactsonline.dataInitializer;
 
 import edu.tcu.cs.hogwartsartifactsonline.dao.ArtifactDao;
+import edu.tcu.cs.hogwartsartifactsonline.dao.UserDao;
+import edu.tcu.cs.hogwartsartifactsonline.dao.WizardDao;
 import edu.tcu.cs.hogwartsartifactsonline.domain.Artifact;
+import edu.tcu.cs.hogwartsartifactsonline.domain.Wizard;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +12,13 @@ import org.springframework.stereotype.Component;
 public class DBDataInitializer implements CommandLineRunner {
 
     private ArtifactDao artifactDao;
+    private WizardDao wizardDao;
+    private UserDao userDao;
 
-    public DBDataInitializer(ArtifactDao artifactDao) {
+    public DBDataInitializer(ArtifactDao artifactDao, WizardDao wizardDao, UserDao userDao) {
         this.artifactDao = artifactDao;
+        this.wizardDao = wizardDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -52,11 +59,45 @@ public class DBDataInitializer implements CommandLineRunner {
         a6.setDescription("Yada Yada Deluminator");
         a6.setImageUrl("imageUrl");
 
-        artifactDao.save(a1);
-        artifactDao.save(a2);
-        artifactDao.save(a3);
-        artifactDao.save(a4);
-        artifactDao.save(a5);
+        Wizard w1 = new Wizard();
+        w1.setName("Dumbledore");
+        w1.addArtifact(a1);
+        w1.addArtifact(a3);
+
+        Wizard w2 = new Wizard();
+        w2.setName("Harry");
+        w2.addArtifact(a2);
+        w2.addArtifact(a4);
+
+        Wizard w3 = new Wizard();
+        w3.setName("Neville");
+        w3.addArtifact(a5);
+
+        wizardDao.save(w1);
+        wizardDao.save(w2);
+        wizardDao.save(w3);
         artifactDao.save(a6);
+
+        User u1 = new User();
+        u1.setUsername("john");
+        u1.setPassword("password");
+        u1.setEnabled(true);
+        u1.setRoles("user");
+
+        User u2 = new User();
+        u2.setUsername("eric");
+        u2.setPassword("password");
+        u2.setEnabled(true);
+        u2.setRoles("user");
+
+        User u3 = new User();
+        u3.setUsername("tom");
+        u3.setPassword("password");
+        u3.setEnabled(false);
+        u3.setRoles("user");
+
+        userDao.save(u1);
+        userDao.save(u2);
+        userDao.save(u3);
     }
 }
